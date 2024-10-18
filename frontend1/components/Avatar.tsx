@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function Avatar({ url, size = 150, onUpload }: Props) {
+  console.log("Debug: avatar function called");
   const [uploading, setUploading] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const avatarSize = { height: size, width: size }
@@ -64,7 +65,7 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
 
       const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer())
 
-      const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg'
+      const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'pdf'
       const path = `${Date.now()}.${fileExt}`
       const { data, error: uploadError } = await supabase.storage
         .from('avatars')

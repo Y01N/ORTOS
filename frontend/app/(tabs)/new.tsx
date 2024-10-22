@@ -7,7 +7,26 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+import { useState, useEffect } from 'react'
+import { View } from 'react-native'
+import { Session } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
+import Auth from '@/components/Auth'
+import Account from '@/components/Account'
+
 export default function TabThreeScreen() {
+  
+  const [session, setSession] = useState<Session | null>(null)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+  
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -84,6 +103,9 @@ export default function TabThreeScreen() {
           ),
         })}
       </Collapsible>
+      <View style={styles.container}>
+      {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />}
+      </View>
     </ParallaxScrollView>
   );
 }
@@ -98,5 +120,11 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
   },
 });

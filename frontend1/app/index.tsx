@@ -21,6 +21,7 @@ import { Session } from '@supabase/supabase-js'
 import { supabase } from '~/lib/supabase'
 import Auth from '~/components/Auth'
 import Account from '~/components/Account'
+import Popup  from '~/components/popup-card'
 
 const GITHUB_AVATAR_URI =
   'https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg';
@@ -109,6 +110,7 @@ export default function Screen() {
           </Button>
         </CardFooter>
       </Card>
+      <Popup />
       <View className='items-center'>
       {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />}
       </View>

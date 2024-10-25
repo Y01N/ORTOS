@@ -103,6 +103,9 @@ export default function TabThreeScreen() {
           ),
         })}
       </Collapsible>
+      <View style={styles.container}>
+      {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />}
+      </View>
     </ParallaxScrollView>
   );
 }

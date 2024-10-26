@@ -12,6 +12,13 @@ import { PortalHost } from '@rn-primitives/portal';
 import { ThemeToggle } from '~/components/ThemeToggle';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 
+import { useState, useEffect } from 'react'
+import { Session } from '@supabase/supabase-js'
+import { supabase } from '~/lib/supabase'
+import Auth from '~/components/Auth'
+import Account from '~/components/Account'
+import Popup  from '~/components/popup-card'
+
 const LIGHT_THEME: Theme = {
   dark: false,
   colors: NAV_THEME.light,
@@ -70,8 +77,10 @@ export default function RootLayout() {
         <Stack.Screen
           name='index'
           options={{
-            title: 'Starter Base',
+            title: '🅱️ORTOS',
+            headerTitleAlign: 'center',
             headerRight: () => <ThemeToggle />,
+            headerLeft: () => <Popup />,
           }}
         />
       </Stack>

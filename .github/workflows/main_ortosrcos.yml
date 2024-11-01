@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://ortos.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_acb02498ae58472ab67b1f8438f23d9a }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_029d781d7f4743fba0f0be4190108cd3 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_1107a9bbb4f24daa81bb1192967a0802 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_b9c1c1f9bf1a47a9b3099bd77ee2998f }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ortos.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_acb02498ae58472ab67b1f8438f23d9a }}/ortos:${{ github.sha }}
+        tags: ortos.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1107a9bbb4f24daa81bb1192967a0802 }}/ortos:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'ortosrcos'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_842555794aca45c59719619300c496bd }}
-        images: 'ortos.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_acb02498ae58472ab67b1f8438f23d9a }}/ortos:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_c33399f13b164cdb8cfaf93c08d63f25 }}
+        images: 'ortos.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1107a9bbb4f24daa81bb1192967a0802 }}/ortos:${{ github.sha }}'

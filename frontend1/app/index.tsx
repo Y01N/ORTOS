@@ -99,7 +99,7 @@ export default function Screen() {
           </AccordionTrigger>
           <AccordionContent>
             <Text>
-              Insert tournament type, etx.
+              Insert tournament type, etx. (now also running on the world wide web!(Testing Continuous Deployment This time))
             </Text>
           </AccordionContent>
         </AccordionItem>

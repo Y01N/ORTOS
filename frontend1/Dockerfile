@@ -38,4 +38,4 @@ WORKDIR /opt/my-app
 COPY . /opt/my-app/
 
 
-CMD ["npx","expo", "start", "--port", "80"]
+CMD ["npx","expo", "start"]

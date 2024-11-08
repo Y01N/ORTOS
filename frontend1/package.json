@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.0.2",
     "@rn-primitives/accordion": "^1.1.0",
     "@rn-primitives/avatar": "~1.1.0",
+    "@rn-primitives/navigation-menu": "^1.1.0",
     "@rn-primitives/portal": "~1.1.0",
     "@rn-primitives/progress": "~1.1.0",
     "@rn-primitives/slot": "~1.1.0",

@@ -2,10 +2,10 @@ import '~/global.css';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Theme, ThemeProvider } from '@react-navigation/native';
-import { SplashScreen, Stack } from 'expo-router';
+import { Href, SplashScreen, Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { Platform } from 'react-native';
+import { Platform, View, Pressable, Text } from 'react-native';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { PortalHost } from '@rn-primitives/portal';
@@ -35,6 +35,35 @@ export {
 
 // Prevent the splash screen from auto-hiding before getting the color scheme.
 SplashScreen.preventAutoHideAsync();
+
+function NavigationMenu() {
+  const router = useRouter();
+  const menuItems = [
+    { title: 'Home', route: '/' },
+    { title: 'About', route: '/about' },
+    { title: 'Contact', route: '/contact' },
+  ];
+
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
+      {menuItems.map((item, index) => (
+        <Pressable
+          key={index}
+          onPress={() => router.push(item.route as Href<string>)}
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? '#ddd' : 'transparent',
+              padding: 8,
+              borderRadius: 4,
+            },
+          ]}
+        >
+          <Text>{item.title}</Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
 
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
@@ -73,6 +102,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+      <NavigationMenu />
       <Stack>
         <Stack.Screen
           name='index'

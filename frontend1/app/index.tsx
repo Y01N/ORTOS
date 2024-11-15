@@ -30,7 +30,9 @@ export default function Screen() {
 
   const [name, setName] = React.useState('');
   const [url, setUrl] = React.useState('');
-  const [progress, setProgress] = React.useState(78);
+  const [player1, setP1] = React.useState('');
+  const [player2, setP2] = React.useState('');
+  const [teamName, setTeamName] = React.useState('');
 
   const onNameChange = (text: string) => {
     setName(text);
@@ -38,6 +40,17 @@ export default function Screen() {
 
   const onUrlChange = (text: string) => {
     setUrl(text);
+  };
+
+  const onP1Change = (text: string) => {
+    setP1(text);
+  };
+
+  const onP2Change = (text: string) => {
+    setP2(text);
+  };
+  const onTeamNameChange = (text: string) => {
+    setTeamName(text);
   };
 
 
@@ -57,6 +70,45 @@ export default function Screen() {
       Alert.alert('Success', 'Tournament created successfully!');
       setName('');  // Clear the name input
       setUrl('');   // Clear the URL input
+    }
+  };
+
+  const createTeam = async () => {
+    if (player1.trim() === '' || player2.trim() === '' || teamName.trim() === '') {
+      Alert.alert('Please enter both team members and a name.');
+      return;
+    }
+  
+    const { data, error } = await supabase
+      .from('teams')
+      .insert([{ name: teamName }])
+      .select();
+  
+    if (error) {
+      Alert.alert('Error', error.message);
+    } else {
+      Alert.alert('Success', 'Team created successfully!');
+      setTeamName('');  // Clear the team name input
+      setP1('');        // Clear player 1 input
+      setP2('');        // Clear player 2 input
+  
+      const teamId = data[0].id;
+      console.log(`Team ${teamName} created with ID ${teamId}`);
+  
+      await addPlayer(player1, teamId);
+      await addPlayer(player2, teamId);
+    }
+  };
+
+  const addPlayer = async (playerName: string, teamId: number) => {
+    const { data, error } = await supabase
+      .from('teamplayers')
+      .insert([{ player_id: playerName, team_id: teamId }]);
+  
+    if (error) {
+      Alert.alert('Error', `Error adding player ${playerName}: ${error.message}`);
+    } else {
+      console.log(`Player ${playerName} added successfully with team ID ${teamId}`);
     }
   };
 
@@ -95,12 +147,31 @@ export default function Screen() {
         </AccordionItem>
         <AccordionItem value='item-2'>
           <AccordionTrigger>
-            <Text>Tournament Format</Text>
+            <Text>Create team</Text>
           </AccordionTrigger>
           <AccordionContent>
-            <Text>
-              Insert tournament type, etx. (now also running on the world wide web!(Testing Continuous Deployment This time))
-            </Text>
+          <Input
+              placeholder='cool team name'
+              value={teamName}
+              onChangeText={onTeamNameChange}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+          <Input
+              placeholder='player1'
+              value={player1}
+              onChangeText={onP1Change}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+            <Input
+              placeholder='player2'
+              value={player2}
+              onChangeText={onP2Change}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+            <Button onPress={createTeam}>Create Team!</Button>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

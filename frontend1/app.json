@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Starter Base",
+    "name": "ORTOS",
     "slug": "starter-base",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Bicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -25,7 +25,7 @@
     "web": {
       "bundler": "metro",
       "output": "single",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/Bicon.png"
     },
     "plugins": ["expo-router"],
     "experiments": {

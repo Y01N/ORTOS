@@ -4,18 +4,18 @@ import { View, Text } from 'react-native';
 import { supabase } from '~/lib/supabase';
 
 export default function Page() {
-  const { slug } = useLocalSearchParams();
+  const { tournament } = useLocalSearchParams();
   const [tournamentName, setTournamentName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTournament = async () => {
-      if (!slug) return;
+      if (!tournament) return;
 
       const { data, error } = await supabase
         .from('tournaments')
         .select('name')
-        .eq('url', slug)
+        .eq('url', tournament)
         .single();
 
       if (error || !data) {
@@ -27,7 +27,7 @@ export default function Page() {
     };
 
     fetchTournament();
-  }, [slug]);
+  }, [tournament]);
 
   if (loading) {
     return <Text>Loading...</Text>;

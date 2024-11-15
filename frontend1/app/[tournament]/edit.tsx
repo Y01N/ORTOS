@@ -16,6 +16,141 @@ import { Button } from "~/components/ui/button"
 export default function Page() {
   const { tournament } = useLocalSearchParams();
   const [tournamentName, setTournamentName] = useState<string | null>(null);
+  const [tournamentId, setTournamentId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const [divName, setName] = React.useState('');
+  const [divSize, setSize] = React.useState('');
+  const [progress, setProgress] = React.useState(78);
+  
+  const onNameChange = (text: string) => {
+    setName(text);
+  };
+
+  const onSizeChange = (text: string) => {
+    setSize(text);
+  };
+
+
+  const editDiv = async () => {
+    if (divName.trim() === '' || divSize.trim() === '') {
+      Alert.alert('Please enter both a division name and size.');
+      return;
+    }
+  
+    try {
+      const { data, error } = await supabase
+        .from('divisions')
+        .upsert({ tournamentid: tournamentId, name: divName, size: divSize });
+  
+      if (error) {
+        Alert.alert('Error', error.message);
+      } else {
+        Alert.alert('Success', 'Division added or updated successfully!');
+        setName('');  // Clear the division name input
+        setSize('');  // Clear the division size input
+      }
+    } catch (error) {
+      Alert.alert('Unexpected Error', (error as Error).message);
+    }
+  };
+
+
+  useEffect(() => {
+    const fetchTournament = async () => {
+      if (!tournament) return;
+
+      const { data, error } = await supabase
+        .from('tournaments')
+        .select('id, name')
+        .eq('url', tournament)
+        .single();
+
+      if (error || !data) {
+        setTournamentName(null);  // Not found, will display 404
+        setTournamentId(null);
+      } else {
+        setTournamentName(data.name);
+        setTournamentId(data.id);
+      }
+      setLoading(false);
+    };
+
+    fetchTournament();
+  }, [tournament]);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  
+  
+  
+
+  return (
+    <View>
+      {tournamentName ? (
+        <Text>Tournament edit page for: {tournamentName}</Text>
+      ) : (
+        <Text style={{ fontSize: 24, textAlign: 'center', color: 'red' }}>
+          404 - Tournament not found
+        </Text>
+      )}
+
+<Accordion
+        type='multiple'
+        collapsible
+        defaultValue={['item-1']}
+        className='w-full max-w-lg native:max-w-lg'
+      >
+        <AccordionItem value='item-1'>
+          <AccordionTrigger>
+            <Text>Divisions</Text>
+          </AccordionTrigger>
+          <AccordionContent>
+          <Text>Division Name:</Text>
+            <Input
+              placeholder='Premier 5.0'
+              value={divName}
+              onChangeText={onNameChange}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+            <Text>Division Size:</Text>
+            <Input
+              placeholder='64'
+              value={divSize}
+              onChangeText={onSizeChange}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+            <Button onPress={editDiv}>Submit</Button>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value='item-2'>
+          <AccordionTrigger>
+            <Text>Registration</Text>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Text>
+              Insert registration and division info here
+            </Text>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </View>
+  );
+}
+
+/*
+
+
+
+
+
+export default function Page() {
+  const { tournament } = useLocalSearchParams();
+  const [tournamentName, setTournamentName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,17 +177,6 @@ export default function Page() {
   if (loading) {
     return <Text>Loading...</Text>;
   }
-
-  const [session, setSession] = useState<Session | null>(null);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
 
   const [name, setName] = React.useState('');
   const [url, setUrl] = React.useState('');
@@ -139,3 +263,4 @@ export default function Page() {
     </View>
   );
 }
+  */

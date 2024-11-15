@@ -21,7 +21,16 @@ export default function Page() {
 
   const [divName, setName] = React.useState('');
   const [divSize, setSize] = React.useState('');
-  const [progress, setProgress] = React.useState(78);
+  const [divisionName, setDivisionName] = useState('');
+  const [stageName, setStageName] = useState('');
+
+  const onDivisionNameChange = (text: string) => {
+    setDivisionName(text);
+  }
+
+  const onStageNameChange = (text: string) => {
+    setStageName(text);
+  }
   
   const onNameChange = (text: string) => {
     setName(text);
@@ -49,6 +58,29 @@ export default function Page() {
         Alert.alert('Success', 'Division added or updated successfully!');
         setName('');  // Clear the division name input
         setSize('');  // Clear the division size input
+      }
+    } catch (error) {
+      Alert.alert('Unexpected Error', (error as Error).message);
+    }
+  };
+
+  const upsertStage = async () => {
+    if (divisionName.trim() === '' || stageName.trim() === '') {
+      Alert.alert('Please enter both a division name and stage name.');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('stages')
+        .upsert({ tournamentid: tournamentId, division_name: divisionName, name: stageName });
+
+      if (error) {
+        Alert.alert('Error', error.message);
+      } else {
+        Alert.alert('Success', 'Stage added or updated successfully!');
+        setDivisionName('');  // Clear the division name input
+        setStageName('');     // Clear the stage name input
       }
     } catch (error) {
       Alert.alert('Unexpected Error', (error as Error).message);
@@ -129,12 +161,28 @@ export default function Page() {
         </AccordionItem>
         <AccordionItem value='item-2'>
           <AccordionTrigger>
-            <Text>Registration</Text>
+            <Text>Stages</Text>
           </AccordionTrigger>
           <AccordionContent>
             <Text>
-              Insert registration and division info here
+              Insert stage division
             </Text>
+            <Input
+              placeholder='Premier 5.0'
+              value={divisionName}
+              onChangeText={onDivisionNameChange}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+            <Text>Stage name:</Text>
+            <Input
+              placeholder='bracket'
+              value={stageName}
+              onChangeText={onStageNameChange}
+              aria-labelledby='inputLabel'
+              aria-errormessage='inputError'
+            />
+            <Button onPress={upsertStage}>Create Stage</Button>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

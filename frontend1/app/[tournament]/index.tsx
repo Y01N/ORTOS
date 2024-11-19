@@ -1,7 +1,9 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View, Text, Alert, Button, TextInput } from 'react-native';
+import { View, Text, Alert, TextInput } from 'react-native';
 import { supabase } from '~/lib/supabase';
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
 
 export default function Page() {
   const { tournament } = useLocalSearchParams();
@@ -87,17 +89,18 @@ export default function Page() {
       {divisions.map((division) => (
         <Text key={division.id}>{division.name} - {division.size}</Text>
       ))}
-      <TextInput
-        placeholder='Division Name'
-        value={divisionName}
-        onChangeText={setDivisionName}
-      />
-      <TextInput
-        placeholder='Team ID'
-        value={teamId}
-        onChangeText={setTeamId}
-      />
-      <Button title="Register" onPress={registerForDivision} />
+      <Input
+          placeholder='Division Name'
+          value={divisionName}
+          onChangeText={setDivisionName}
+        />
+        
+        <Input
+          placeholder='Team ID'
+          value={teamId}
+          onChangeText={setTeamId}
+        />
+      <Button onPress={registerForDivision}>Register</Button>
     </View>
   );
 }

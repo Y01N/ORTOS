@@ -1,7 +1,7 @@
 🅱️ortos
 
 Requirements:
-- NPM
+- NPM: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
 
 How to run frontend locally:
